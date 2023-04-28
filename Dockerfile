@@ -27,15 +27,15 @@ RUN mv /tmp/nginx_${NGINX_VERSION}_amd64.deb /tmp/nginx.deb
 #----------------------------------------------------------------------------------
 #==================================================================================
 
-FROM python:3.7-slim-buster AS python_wheel
+FROM python:3.11-slim-buster AS python_wheel
 
 # Set install dir
 WORKDIR /usr/src/app
 
-ADD https://nightly.odoo.com/13.0/nightly/src/odoo_13.0.latest.tar.gz ./odoo_13.0.latest.tar.gz
+ADD https://nightly.odoo.com/16.0/nightly/src/odoo_16.0.latest.tar.gz ./odoo_16.0.latest.tar.gz
 
-RUN tar -xf odoo_13.0.latest.tar.gz --no-same-owner requirements.txt \
-  && rm odoo_13.0.latest.tar.gz \
+RUN tar -xf odoo_16.0.latest.tar.gz --no-same-owner requirements.txt \
+  && rm odoo_16.0.latest.tar.gz \
 COPY cloud_addons/requirements.txt ./cloud-requirements.txt
 
 RUN set -x; \
@@ -52,12 +52,12 @@ RUN set -x; \
 #----------------------------------------------------------------------------------
 #==================================================================================
 
-FROM python:3.7-slim-buster
+FROM python:3.11-slim-buster
 
 # Set install dir
 WORKDIR /usr/src/app
 
-ADD https://nightly.odoo.com/13.0/nightly/src/odoo_13.0.latest.tar.gz ./odoo_13.0.latest.tar.gz
+ADD https://nightly.odoo.com/16.0/nightly/src/odoo_16.0.latest.tar.gz ./odoo_16.0.latest.tar.gz
 COPY --from=0 /tmp/nginx.deb /tmp/nginx.deb
 
 # Create odoo user and directories and set permissions
