@@ -64,9 +64,9 @@ COPY --from=0 /tmp/nginx.deb /tmp/nginx.deb
 RUN useradd -ms /bin/bash odoo \
   && mkdir /etc/odoo /mnt/odoo /mnt/odoo/cloud_addons /mnt/odoo/data /usr/src/app/extra_addons /usr/src/app/scripts \
   && chown -R odoo:odoo /etc/odoo /mnt/odoo  /usr/src/app \
-  && runuser -u odoo -- tar -xf odoo_13.0.latest.tar.gz --no-same-owner \
+  && runuser -u odoo -- tar -xf odoo_16.0.latest.tar.gz --no-same-owner \
   && runuser -u odoo -- mv `find -maxdepth 1 -iname "odoo-*"` odoo \
-  && rm odoo_13.0.latest.tar.gz
+  && rm odoo_16.0.latest.tar.gz
 
 # Install Odoo dependencies and nginx
 RUN cp odoo/requirements.txt .
