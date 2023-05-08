@@ -8,8 +8,8 @@ RUN echo "deb-src http://nginx.org/packages/mainline/debian/ bullseye nginx" >> 
 
 WORKDIR /tmp
 
-ENV NGINX_BASE_VERSION 1.19.2
-ENV NGINX_VERSION "1.19.2-1~bullseye"
+ENV NGINX_BASE_VERSION 1.24.0
+ENV NGINX_VERSION "1.24.0~bullseye"
 
 RUN apt-get update && \
     apt-get build-dep -y nginx && \
