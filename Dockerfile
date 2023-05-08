@@ -1,15 +1,15 @@
-FROM debian:buster-slim AS nginx_build
+FROM debian:bullseye-slim AS nginx_build
 
 RUN apt-get update && \
     apt-get install -y wget gnupg2 git \
     build-essential zlib1g-dev libpcre3 libpcre3-dev unzip uuid-dev
 RUN apt-key adv --no-tty  --keyserver hkp://pool.sks-keyservers.net:80 --recv-keys 573BFD6B3D8FBC641079A6ABABF5BD827BD9BF62
-RUN echo "deb-src http://nginx.org/packages/mainline/debian/ buster nginx" >> /etc/apt/sources.list
+RUN echo "deb-src http://nginx.org/packages/mainline/debian/ bullseye nginx" >> /etc/apt/sources.list
 
 WORKDIR /tmp
 
 ENV NGINX_BASE_VERSION 1.19.2
-ENV NGINX_VERSION "1.19.2-1~buster"
+ENV NGINX_VERSION "1.19.2-1~bullseye"
 
 RUN apt-get update && \
     apt-get build-dep -y nginx && \
@@ -27,7 +27,7 @@ RUN mv /tmp/nginx_${NGINX_VERSION}_amd64.deb /tmp/nginx.deb
 #----------------------------------------------------------------------------------
 #==================================================================================
 
-FROM python:3.11-slim-buster AS python_wheel
+FROM python:3.11-slim-bullseye AS python_wheel
 
 # Set install dir
 WORKDIR /usr/src/app
@@ -52,7 +52,7 @@ RUN set -x; \
 #----------------------------------------------------------------------------------
 #==================================================================================
 
-FROM python:3.11-slim-buster
+FROM python:3.11-slim-bullseye
 
 # Set install dir
 WORKDIR /usr/src/app
@@ -77,8 +77,7 @@ COPY --from=python_wheel /usr/src/app/wheels wheels
 RUN set -x; \
   apt update \
   && apt install -y --no-install-recommends curl \
-  && curl -o wkhtmltox.deb -sSL https://github.com/wkhtmltopdf/wkhtmltopdf/releases/download/0.12.5/wkhtmltox_0.12.5-1.stretch_amd64.deb \
-  && echo '7e35a63f9db14f93ec7feeb0fce76b30c08f2057 wkhtmltox.deb' | sha1sum -c - \
+  && curl -o wkhtmltox.deb -sSL https://github.com/wkhtmltopdf/packaging/releases/download/0.12.6.1-2/wkhtmltox_0.12.6.1-2.bullseye_amd64.deb \
   && apt install -y --no-install-recommends ./wkhtmltox.deb ca-certificates /tmp/nginx.deb supervisor \
   && rm -rf /var/lib/apt/lists/* wkhtmltox.deb /tmp/nginx.deb \
   && pip install --no-index --find-links=wheels --no-cache-dir -r requirements.txt \
